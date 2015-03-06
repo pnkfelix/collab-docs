@@ -1,14 +1,17 @@
 List of Bugs uncovered in Rust via arithmetic overflow checking
 ===============================================================
+
 This document is a list of bugs that were uncovered during the
 implementation and deployment of arithmetic overflow checking.
+
 This list is restricted solely to *legitimate* bugs. Cases
 where the overflow was benign (e.g. the computed value is
 unused), transient (e.g. the computed wrapped value is
 guaranteed to be brought back into the original range, such as
-in `unsigned - 1 + provably_    tpositive`), or silly (random
+in `unsigned - 1 + provably_positive`), or silly (random
 non-functional code in the tests or documentation) are not
 included in the list.
+
 However, extremely rare or obscure corner cases are considered
 legitimate bugs. (We begin with such a case.)
 
@@ -20,8 +23,8 @@ legitimate bugs. (We begin with such a case.)
     does need to handle out-of-bounds inputs, so this
     appeared benign at first, but there is the corner case
     of an iterator that actually covers the whole range
-    of indices, which would then return Some(_) here when
-    (pnkfelix thinks) None should be expected.
+    of indices, which would then return `Some(_)` here when
+    (pnkfelix thinks) `None` should be expected.
 
     reference:
     https://github.com/rust-lang/rust/pull/22532#issuecomment-75168901
@@ -89,7 +92,7 @@ legitimate bugs. (We begin with such a case.)
         my_stack_top + 20000 - OS_DEFAULT_STACK_ESTIMATE;
     ```
 
-    where OS_DEFAULT_STACK_ESTIMATE is a large value
+    where `OS_DEFAULT_STACK_ESTIMATE` is a large value
     (> 1mb).
 
     However, my claim is that this code is playing guessing
@@ -100,6 +103,7 @@ legitimate bugs. (We begin with such a case.)
     for now. (pnkfelix subsequently changed the code to use
     saturated arithmetic in both cases, though obviously
     that could be tweaked a bit.)
+
  4. struct order of evaluation
 
     There is an explanatory story here:
@@ -112,8 +116,8 @@ legitimate bugs. (We begin with such a case.)
     out an attempt to reserve a ridiculous amount
     of space within a `Vec`. (This was on an experimental
     branch of the codebase where we would fill with
-    a series of 0xC1 bytes when a value was dropped, rather
-    than filling with 0x00 bytes.)
+    a series of `0xC1` bytes when a value was dropped, rather
+    than filling with `0x00` bytes.)
 
     It is actually quite likely that this test would still
     have failed without the arithmetic overflow checking,
