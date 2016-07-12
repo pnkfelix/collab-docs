@@ -15,7 +15,7 @@ included in the list.
 However, extremely rare or obscure corner cases are considered
 legitimate bugs. (We begin with such a case.)
 
- 1. `impl core::iter::RandomAccessIter for core::iter::Rev`
+### `impl core::iter::RandomAccessIter for core::iter::Rev`
 
     if one calls the `iter.idx(index)` with `index <= amt`,
     then it calls the wrapped inner iterstor with a wrapped
@@ -29,7 +29,7 @@ legitimate bugs. (We begin with such a case.)
     reference:
     https://github.com/rust-lang/rust/pull/22532#issuecomment-75168901
 
- 2. `std::sys::windows::time::SteadyTime`
+### `std::sys::windows::time::SteadyTime`
 
     `fn ns` was converting a tick count `t` to nanoseconds
     via the computation `t * 1_000_000_000 / frequency()`;
@@ -51,7 +51,8 @@ legitimate bugs. (We begin with such a case.)
     overflow forces such bugs to be fixed in some manner
     rather than ignored.
 
- 3. `std::rt::lang_start`
+### `std::rt::lang_start`
+
     The runtime startup uses a fairly loose computation to
     determine the stack extent to pass to
     record_os_managed_stack_bounds (which sets up guard
@@ -104,7 +105,7 @@ legitimate bugs. (We begin with such a case.)
     saturated arithmetic in both cases, though obviously
     that could be tweaked a bit.)
 
- 4. struct order of evaluation
+### struct order of evaluation
 
     There is an explanatory story here:
 
@@ -124,3 +125,22 @@ legitimate bugs. (We begin with such a case.)
     but it probably would have been much harder to diagnose
     since the panic would have happened at some arbitrary
     point later in the control flow.
+
+### Invalid `Span` constructions:
+
+    https://github.com/rust-lang/rust/issues/23480
+
+    Experts in the syntax system probably already knew
+    about this bug, but overflow checking forced everyone
+    to be reminded of it, repeatedly, in:
+
+    https://github.com/rust-lang/rust/issues/23115
+
+    See in particular:
+
+    https://github.com/rust-lang/rust/issues/23115#issuecomment-82960834
+
+    We have not actually *fixed* issue #23480 at the time of
+    this writing. Instead we put in a workaround:
+
+    https://github.com/rust-lang/rust/pull/23489
