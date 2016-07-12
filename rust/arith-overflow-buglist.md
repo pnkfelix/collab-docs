@@ -175,3 +175,10 @@ Anyway, the chosen fix was to just return the results so far before
 hitting the overflow:
 
 https://github.com/rust-lang/rust/pull/23127
+
+### multiline error spans
+
+This seems like a combination of a typo (or "think-o" perhaps)
+doing `lo - hi` instead of `hi - lo`, but also a fencepost error.
+
+https://github.com/rust-lang/rust/pull/31281
