@@ -182,3 +182,15 @@ This seems like a combination of a typo (or "think-o" perhaps)
 doing `lo - hi` instead of `hi - lo`, but also a fencepost error.
 
 https://github.com/rust-lang/rust/pull/31281
+
+### Type checking of tuple patterns
+
+https://github.com/rust-lang/rust/pull/33864#issuecomment-221911260
+
+https://github.com/rust-lang/rust/pull/33864/commits/0ca9bf394006fe635a4a76ca6fa78a70633666f0
+
+This code passed in an `expected_len` rather than `max_len`, a logic
+error, and the arithmetic checking code caught it.  (I'm not quite
+clear on whether there is a unit test that also could have caught it
+independently? It sounds like if such a test exists, it was not part
+of the test suite...)
