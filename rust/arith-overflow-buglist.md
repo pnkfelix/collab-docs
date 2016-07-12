@@ -144,3 +144,34 @@ legitimate bugs. (We begin with such a case.)
     this writing. Instead we put in a workaround:
 
     https://github.com/rust-lang/rust/pull/23489
+
+### Overflow in benchmark iteration increment
+
+    The implementation of `#[bench]` was not prepared to deal
+    with an overflow in the iteration count.
+
+    The arithmetic overflow checking forced that to fail on a
+    benchmark like
+
+    ```rust
+    #[bench]
+    fn foo(b: &mut test::Bencher) {}
+    ```
+
+    rather than return bogus results.
+
+    The iteration count is stored in a `u64`, so overflow sounds
+    unlikely -- even though `n` is being multiplied by 2 on every
+    increment, so it sounds plausible that we could get to very large
+    numbers indeed, the fact that we have to actually *run* that many
+    iterations is what gives me pause.
+
+    At this point I am assuming that the compiler is doing something
+    to optimize away the looping when the benchmark code is empty:
+    keep in mind that the `#[bench]` code above is not calling the
+    `black_box` method of `b`.  Maybe we should be requring that?
+
+    Anyway, the chosen fix was to just return the results so far before
+    hitting the overflow:
+
+    https://github.com/rust-lang/rust/pull/23127
