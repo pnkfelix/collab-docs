@@ -221,3 +221,13 @@ debug builds, which at that time were not tested by bors/homu I
 guess).
 
 https://github.com/rust-lang/rust/pull/31257
+
+### Servo /dom/html/reflection-embedded.html
+
+I am not an expert on the CSS specification, but my intuition is
+that this is a legitimate bug (which was uncovered by the overflow
+checker):
+
+https://github.com/servo/servo/issues/11175
+
+https://github.com/servo/servo/pull/10544#issuecomment-209357243
