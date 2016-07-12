@@ -212,3 +212,12 @@ stop indicating that those values needed to be passed via memory.
 
 (Definitely seems like a legit and subtle bug to me.)
 
+### `rustc` session error count
+
+This was a simple logic error that produced bogus values for the
+accumulated error count. The underflow checker caught it, our
+compile-fail/ test suite at some point started hitting it (but only on
+debug builds, which at that time were not tested by bors/homu I
+guess).
+
+https://github.com/rust-lang/rust/pull/31257
