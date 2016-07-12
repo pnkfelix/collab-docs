@@ -194,3 +194,21 @@ error, and the arithmetic checking code caught it.  (I'm not quite
 clear on whether there is a unit test that also could have caught it
 independently? It sounds like if such a test exists, it was not part
 of the test suite...)
+
+### Underflow when counting registers
+
+https://github.com/rust-lang/rust/pull/29091
+
+Apparently our C ABI code for x86_64 was determining where an argument
+needed to be passed in memory or in a register via some logic that
+computes the number of available registers via cumulative subtraction
+from a running total, and compares the number available to how many
+registers we need. If available is less than the the number needed, we
+know its passed in memory.
+
+The problem was that it originally used an unsized integer type for
+the accumulated number available, and thus if underflowed, we would
+stop indicating that those values needed to be passed via memory.
+
+(Definitely seems like a legit and subtle bug to me.)
+
